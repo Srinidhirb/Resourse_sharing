@@ -11,7 +11,7 @@ import {
   Badge,
   IconButton,
 } from "@chakra-ui/react";
-import { useEffect, useState ,useRef} from "react";
+import { useEffect, useState, useRef } from "react";
 import Loader from "../Component/Loader";
 import Navbar from "../Component/Navbar";
 
@@ -48,13 +48,14 @@ export default function PreviewPage() {
         formData.images.forEach((file) => data.append("images", file));
       } else {
         data.append(key, formData[key]);
+        
       }
     });
     try {
       await axios.post("http://localhost:5000/api/products", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-     
+    
       navigate("/orderpage");
     } catch (error) {
       console.error("Error adding product:", error);
@@ -69,6 +70,26 @@ export default function PreviewPage() {
     });
   };
 
+  const calculateTotalPrice = () => {
+    const totalDays = Math.ceil(
+      (new Date(formData.endDate) - new Date(formData.startDate)) /
+        (1000 * 60 * 60 * 24)
+    );
+    const perDayPrice = parseFloat(formData.perDayPrice) || 0;
+    const perWeekPrice = parseFloat(formData.perWeekPrice) || 0;
+
+    let totalPrice;
+    if (totalDays < 7) {
+      totalPrice = totalDays * perDayPrice;
+    } else {
+      totalPrice =
+        Math.floor(totalDays / 7) * perWeekPrice +
+        (totalDays % 7) * perDayPrice;
+    }
+
+    return { totalPrice, totalDays };
+  };
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -77,6 +98,8 @@ export default function PreviewPage() {
       setLoading(false);
     }, 2000);
   }, []);
+  const { totalPrice, totalDays } = calculateTotalPrice();
+  console.log(formData);
   return (
     <>
       {loading ? (
@@ -201,6 +224,16 @@ export default function PreviewPage() {
                   <Text mt={2} fontWeight="semibold">
                     Email: {formData.email}
                   </Text>
+                  <Text fontWeight="bold" mt={4}>
+                    Price per Day: ₹{formData.perDayPrice || "N/A"}
+                  </Text>
+                  <Text fontWeight="bold" mt={2}>
+                    Price per Week: ₹{formData.perWeekPrice || "N/A"}
+                  </Text>
+                  <Text fontWeight="bold" mt={4}>
+                    Total Price: ₹{totalPrice} ({totalDays} days)
+                  </Text>
+
                   <Flex
                     width={450}
                     gap={3}

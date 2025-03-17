@@ -35,6 +35,9 @@ mongoose
     startDate: Date, // ✅ Ensure these fields exist in the schema
     endDate: Date,
     totalAvailableDays: Number,
+    perDayPrice: Number, // Ensure this field exists
+    perWeekPrice: Number, 
+    
   });
 
 const Product = mongoose.model("Product", productSchema);
@@ -54,16 +57,17 @@ const upload = multer({ storage });
 
 app.post("/api/products", upload.array("images", 5), async (req, res) => {
   try {
-    const imagePaths = req.files?.map((file) => file.path.replace(/\\/g, "/")) || []; // Fix path
-
-    const { startDate, endDate, totalAvailableDays, ...otherData } = req.body;
+    const imagePaths = req.files?.map((file) => file.path.replace(/\\/g, "/")) || [];
+    const { startDate, endDate, totalAvailableDays, perDayPrice, perWeekPrice, ...otherData } = req.body;
 
     const newProduct = new Product({
       ...otherData,
       images: imagePaths,
-      startDate: startDate ? new Date(startDate) : null, // Convert to Date object
-      endDate: endDate ? new Date(endDate) : null, // Convert to Date object
-      totalAvailableDays: totalAvailableDays ? Number(totalAvailableDays) : 0, // Convert to Number
+      startDate: startDate ? new Date(startDate) : null,
+      endDate: endDate ? new Date(endDate) : null,
+      totalAvailableDays: totalAvailableDays ? Number(totalAvailableDays) : 0,
+      perDayPrice: perDayPrice ? Number(perDayPrice) : 0, // Ensure this field is parsed and saved
+      perWeekPrice: perWeekPrice ? Number(perWeekPrice) : 0, // Ensure this field is parsed and saved
     });
 
     await newProduct.save();

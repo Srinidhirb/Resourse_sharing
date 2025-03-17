@@ -6,8 +6,11 @@ import ProductList from "./Pages/ProductList";
 import ProductDetails from "./Pages/ProductDetails";
 import ImageGallery from "./Pages/ImageGallery";
 import OrderPage from "./Pages/OrderPage";
+import CartPage from "./Pages/CartPage";
+import { CartProvider } from "./Context/CartContext";
 function App() {
   return (
+    <CartProvider>
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -17,8 +20,10 @@ function App() {
         <Route path="/preview" element={<PreviewPage />} />
         <Route path="/gallery" element={<ImageGallery />} />
         <Route path="/orderpage" element={<OrderPage />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </Router>
+    </CartProvider>
   );
 }
 

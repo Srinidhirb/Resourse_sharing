@@ -9,8 +9,8 @@ import Navbar from "../Component/Navbar";
 const MotionBox = motion(Box); // Motion wrapper for animations
 
 const OrderPage = ({
-  title = "Order Successful!",
-  message = "Your order has been placed successfully.",
+  title = "Congratulations",
+  message = "Your Listing has been  Successfully Added.",
 }) => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showText, setShowText] = useState(false);

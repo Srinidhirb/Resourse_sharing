@@ -3,12 +3,13 @@ import {
   Flex,
   IconButton,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 const Navbar = ({ defaultWhite = false }) => {
   const [scroll, setScroll] = useState(false);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const handleScroll = () => {
       setScroll(window.scrollY > 60);
@@ -68,6 +69,7 @@ const Navbar = ({ defaultWhite = false }) => {
             variant="ghost"
             _hover={{ backgroundColor: "transparent" }}
             color={textColor}
+            onClick={() => navigate(`/cart`)}
           />
         </Flex>
       </Flex>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaTrash, FaCheck, FaUpload ,FaCalendarAlt  } from "react-icons/fa";
+import { FaTrash, FaCheck, FaUpload, FaCalendarAlt } from "react-icons/fa";
 import { DateRange } from "react-date-range";
 import {
   Box,
@@ -16,7 +16,8 @@ import {
   ModalOverlay,
   ModalContent,
   ModalBody,
-   InputGroup, InputRightElement
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
@@ -34,6 +35,8 @@ export default function ProductForm() {
     category: "",
     productDetails: "",
     images: [],
+    perDayPrice: "",
+    perWeekPrice: "",
   });
   const [state, setState] = useState([
     {
@@ -160,220 +163,270 @@ export default function ProductForm() {
           startDate: state[0].startDate,
           endDate: state[0].endDate,
           totalAvailableDays: calculateTotalDays(),
+          totalPrice: calculateTotalPrice(), 
         },
       },
     });
   };
-
-
+  const calculateTotalPrice = () => {
+    const totalDays = calculateTotalDays();
+    const perDayPrice = parseFloat(formData.perDayPrice) || 0;
+    const perWeekPrice = parseFloat(formData.perWeekPrice) || 0;
+  
+    if (totalDays < 7) {
+      return totalDays * perDayPrice;
+    } else {
+      return Math.floor(totalDays / 7) * perWeekPrice + (totalDays % 7) * perDayPrice;
+    }
+  };
   return (
     <>
-       <Navbar defaultWhite={true} />
-    <Box maxW="2xl" mt={20} mx="auto" p={6} bg="white" shadow="lg" borderRadius="lg">
-      <Text fontSize="2xl" fontWeight="bold" textAlign="center" >
-      Add Your Listing
-      </Text>
-      <Text fontSize="1xl" fontWeight="bold" textAlign="center" mb={4}>
-      Fill out the form to share your resources quickly and easily.
-      </Text>
-      <form onSubmit={handleSubmit}>
-        <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={4}>
-          {/* Product Name & Phone */}
-          <GridItem>
-            <Input
-              type="text"
-              name="productName"
-              placeholder="Product Name"
-              value={formData.productName}
-              onChange={handleChange}
-              border={errors.productName ? "2px solid red" : "1px solid gray"}
-            />
-            {errors.productName && (
-              <Text color="red.500">{errors.productName}</Text>
-            )}
-          </GridItem>
-          <GridItem>
-            <Input
-              type="text"
-              name="phone"
-              placeholder="Phone"
-              value={formData.phone}
-              onChange={handleChange}
-              border={errors.phone ? "2px solid red" : "1px solid gray"}
-            />
-            {errors.phone && <Text color="red.500">{errors.phone}</Text>}
-          </GridItem>
+      <Navbar defaultWhite={true} />
+      <Box
+        maxW="2xl"
+        mt={20}
+        mx="auto"
+        p={6}
+        bg="white"
+        shadow="lg"
+        borderRadius="lg"
+      >
+        <Text fontSize="2xl" fontWeight="bold" textAlign="center">
+          Add Your Listing
+        </Text>
+        <Text fontSize="1xl" fontWeight="bold" textAlign="center" mb={4}>
+          Fill out the form to share your resources quickly and easily.
+        </Text>
+        <form onSubmit={handleSubmit}>
+          <Grid templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }} gap={4}>
+            {/* Product Name & Phone */}
+            <GridItem>
+              <Input
+                type="text"
+                name="productName"
+                placeholder="Product Name"
+                value={formData.productName}
+                onChange={handleChange}
+                border={errors.productName ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.productName && (
+                <Text color="red.500">{errors.productName}</Text>
+              )}
+            </GridItem>
+            <GridItem>
+              <Input
+                type="text"
+                name="phone"
+                placeholder="Phone"
+                value={formData.phone}
+                onChange={handleChange}
+                border={errors.phone ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.phone && <Text color="red.500">{errors.phone}</Text>}
+            </GridItem>
 
-          {/* Email & Price */}
-          <GridItem>
-            <Input
-              type="email"
-              name="email"
-              placeholder="Email Address"
-              value={formData.email}
-              onChange={handleChange}
-              border={errors.email ? "2px solid red" : "1px solid gray"}
-            />
-            {errors.email && <Text color="red.500">{errors.email}</Text>}
-          </GridItem>
-          <GridItem>
-            <Input
-              type="number"
-              name="price"
-              placeholder="Price (₹)"
-              value={formData.price}
-              onChange={handleChange}
-              border={errors.price ? "2px solid red" : "1px solid gray"}
-            />
-            {errors.price && <Text color="red.500">{errors.price}</Text>}
-          </GridItem>
+            {/* Email & Price */}
+            <GridItem>
+              <Input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value={formData.email}
+                onChange={handleChange}
+                border={errors.email ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.email && <Text color="red.500">{errors.email}</Text>}
+            </GridItem>
+            <GridItem>
+              <Input
+                type="number"
+                name="price"
+                placeholder="Price (₹)"
+                value={formData.price}
+                onChange={handleChange}
+                border={errors.price ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.price && <Text color="red.500">{errors.price}</Text>}
+            </GridItem>
 
-          {/* Quantity & Category */}
-          <GridItem>
-            <Input
-              type="number"
-              name="quantity"
-              placeholder="Quantity"
-              value={formData.quantity}
-              onChange={handleChange}
-              border={errors.quantity ? "2px solid red" : "1px solid gray"}
-            />
-            {errors.quantity && <Text color="red.500">{errors.quantity}</Text>}
-          </GridItem>
-          <GridItem>
-            <Select
-              name="category"
-              placeholder="Select Category"
-              value={formData.category}
-              onChange={handleChange}
-              border={errors.category ? "2px solid red" : "1px solid gray"}
+            {/* Quantity & Category */}
+            <GridItem>
+              <Input
+                type="number"
+                name="quantity"
+                placeholder="Quantity"
+                value={formData.quantity}
+                onChange={handleChange}
+                border={errors.quantity ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.quantity && (
+                <Text color="red.500">{errors.quantity}</Text>
+              )}
+            </GridItem>
+            <GridItem>
+              <Input
+                type="number"
+                name="perDayPrice"
+                placeholder="Price per Day (₹)"
+                value={formData.perDayPrice}
+                onChange={handleChange}
+                border={errors.perDayPrice ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.perDayPrice && (
+                <Text color="red.500">{errors.perDayPrice}</Text>
+              )}
+            </GridItem>
+            <GridItem>
+              <Input
+                type="number"
+                name="perWeekPrice"
+                placeholder="Price per Week (₹)"
+                value={formData.perWeekPrice}
+                onChange={handleChange}
+                border={
+                  errors.perWeekPrice ? "2px solid red" : "1px solid gray"
+                }
+              />
+              {errors.perWeekPrice && (
+                <Text color="red.500">{errors.perWeekPrice}</Text>
+              )}
+            </GridItem>
+            <GridItem>
+              <Select
+                name="category"
+                placeholder="Select Category"
+                value={formData.category}
+                onChange={handleChange}
+                border={errors.category ? "2px solid red" : "1px solid gray"}
+              >
+                <option value="Tractors">Tractors</option>
+                <option value="Sprayers">Sprayers</option>
+                <option value="Plough">Plough</option>
+                <option value="Spade">Spade</option>
+              </Select>
+              {errors.category && (
+                <Text color="red.500">{errors.category}</Text>
+              )}
+            </GridItem>
+
+            {/* Date Selection */}
+            <GridItem colSpan={2}>
+              <InputGroup>
+                <Input
+                  type="text"
+                  readOnly
+                  value={
+                    state[0].startDate && state[0].endDate
+                      ? `Available: ${state[0].startDate.toDateString()} - ${state[0].endDate.toDateString()} (${calculateTotalDays()} days)`
+                      : "Select Availability Dates"
+                  }
+                  onClick={handleDateInputClick}
+                  ref={dateInputRef}
+                  cursor="pointer"
+                />
+                <InputRightElement pointerEvents="none">
+                  <FaCalendarAlt color="gray.500" />
+                </InputRightElement>
+              </InputGroup>
+            </GridItem>
+            {/* Product Description */}
+            <GridItem colSpan={2}>
+              <Input
+                type="text"
+                name="productDetails"
+                placeholder="Product Description"
+                value={formData.productDetails}
+                onChange={handleChange}
+                border={
+                  errors.productDetails ? "2px solid red" : "1px solid gray"
+                }
+              />
+              {errors.productDetails && (
+                <Text color="red.500">{errors.productDetails}</Text>
+              )}
+            </GridItem>
+          </Grid>
+
+          {/* Image Upload */}
+          <Box mt={4}>
+            <Button
+              leftIcon={<FaUpload />}
+              colorScheme="blue"
+              variant="outline"
+              as="label"
+              cursor="pointer"
             >
-              <option value="Tractors">Tractors</option>
-              <option value="Sprayers">Sprayers</option>
-              <option value="Plough">Plough</option>
-              <option value="Spade">Spade</option>
-            </Select>
-            {errors.category && <Text color="red.500">{errors.category}</Text>}
-          </GridItem>
-
-          {/* Date Selection */}
-          <GridItem colSpan={2}>
-  <InputGroup>
-    <Input
-      type="text"
-      readOnly
-      value={
-        state[0].startDate && state[0].endDate
-          ? `Available: ${state[0].startDate.toDateString()} - ${state[0].endDate.toDateString()} (${calculateTotalDays()} days)`
-          : "Select Availability Dates"
-      }
-      onClick={handleDateInputClick}
-      ref={dateInputRef}
-      cursor="pointer"
-    />
-    <InputRightElement pointerEvents="none">
-      <FaCalendarAlt  color="gray.500" />
-    </InputRightElement>
-  </InputGroup>
-</GridItem>
-          {/* Product Description */}
-          <GridItem colSpan={2}>
-            <Input
-              type="text"
-              name="productDetails"
-              placeholder="Product Description"
-              value={formData.productDetails}
-              onChange={handleChange}
-              border={
-                errors.productDetails ? "2px solid red" : "1px solid gray"
-              }
-            />
-            {errors.productDetails && (
-              <Text color="red.500">{errors.productDetails}</Text>
+              Upload Images
+              <input
+                type="file"
+                name="images"
+                multiple
+                onChange={handleFileChange}
+                hidden
+              />
+            </Button>
+            {errors.images && (
+              <Text color="red.500" mt={1}>
+                {errors.images}
+              </Text>
             )}
-          </GridItem>
-        </Grid>
+          </Box>
 
-        {/* Image Upload */}
-        <Box mt={4}>
-          <Button
-            leftIcon={<FaUpload />}
-            colorScheme="blue"
-            variant="outline"
-            as="label"
-            cursor="pointer"
-          >
-            Upload Images
-            <input
-              type="file"
-              name="images"
-              multiple
-              onChange={handleFileChange}
-              hidden
-            />
+          {/* Image Preview */}
+          <Flex wrap="wrap" gap={2} mt={2}>
+            {formData.images?.map((file, index) => (
+              <Box key={index} position="relative">
+                <Image
+                  src={URL.createObjectURL(file)}
+                  alt={`Preview ${index + 1}`}
+                  boxSize="100px"
+                  objectFit="cover"
+                  borderRadius="md"
+                />
+                <Button
+                  position="absolute"
+                  top="2"
+                  right="2"
+                  size="xs"
+                  colorScheme="red"
+                  onClick={() => handleDeleteImage(index)}
+                >
+                  <FaTrash />
+                </Button>
+              </Box>
+            ))}
+          </Flex>
+
+          {/* Date Picker Modal */}
+          <Modal isOpen={showDateRange} onClose={() => setShowDateRange(false)}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalBody p={4}>
+                <DateRange
+                  editableDateInputs
+                  onChange={(item) => handleDateRangeChange(item)}
+                  moveRangeOnFirstSelection
+                  ranges={state}
+                />
+                <Button
+                  leftIcon={<FaCheck />}
+                  colorScheme="blue"
+                  onClick={handleConfirmDateRange}
+                  width="full"
+                  mt={4}
+                >
+                  Confirm
+                </Button>
+              </ModalBody>
+            </ModalContent>
+          </Modal>
+
+          {/* Submit Button */}
+          <Button type="submit" colorScheme="blue" width="full" mt={4}>
+            Preview
           </Button>
-          {errors.images && (
-            <Text color="red.500" mt={1}>
-              {errors.images}
-            </Text>
-          )}
-        </Box>
-
-        {/* Image Preview */}
-        <Flex wrap="wrap" gap={2} mt={2}>
-          {formData.images?.map((file, index) => (
-            <Box key={index} position="relative">
-              <Image
-                src={URL.createObjectURL(file)}
-                alt={`Preview ${index + 1}`}
-                boxSize="100px"
-                objectFit="cover"
-                borderRadius="md"
-              />
-              <Button
-                position="absolute"
-                top="2"
-                right="2"
-                size="xs"
-                colorScheme="red"
-                onClick={() => handleDeleteImage(index)}
-              >
-                <FaTrash />
-              </Button>
-            </Box>
-          ))}
-        </Flex>
-
-        {/* Date Picker Modal */}
-        <Modal isOpen={showDateRange} onClose={() => setShowDateRange(false)}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalBody p={4}>
-              <DateRange
-                editableDateInputs
-                onChange={(item) => handleDateRangeChange(item)}
-                moveRangeOnFirstSelection
-                ranges={state}
-              />
-              <Button
-                leftIcon={<FaCheck />}
-                colorScheme="blue"
-                onClick={handleConfirmDateRange}
-                width="full"
-                mt={4}
-              >
-                Confirm
-              </Button>
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-
-        {/* Submit Button */}
-        <Button type="submit" colorScheme="blue" width="full" mt={4}>
-          Preview
-        </Button>
-      </form>
-    </Box>
+        </form>
+      </Box>
     </>
   );
 }
