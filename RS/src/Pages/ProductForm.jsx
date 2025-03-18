@@ -37,6 +37,8 @@ export default function ProductForm() {
     images: [],
     perDayPrice: "",
     perWeekPrice: "",
+    Address: "",
+    Username: "",
   });
   const [state, setState] = useState([
     {
@@ -112,6 +114,8 @@ export default function ProductForm() {
       ...formData,
       startDate: item.selection.startDate,
       endDate: item.selection.endDate,
+      Address: item.selection.Address,
+      name: item.selection.name,
     });
   };
 
@@ -163,7 +167,7 @@ export default function ProductForm() {
           startDate: state[0].startDate,
           endDate: state[0].endDate,
           totalAvailableDays: calculateTotalDays(),
-          totalPrice: calculateTotalPrice(), 
+          totalPrice: calculateTotalPrice(),
         },
       },
     });
@@ -172,11 +176,13 @@ export default function ProductForm() {
     const totalDays = calculateTotalDays();
     const perDayPrice = parseFloat(formData.perDayPrice) || 0;
     const perWeekPrice = parseFloat(formData.perWeekPrice) || 0;
-  
+
     if (totalDays < 7) {
       return totalDays * perDayPrice;
     } else {
-      return Math.floor(totalDays / 7) * perWeekPrice + (totalDays % 7) * perDayPrice;
+      return (
+        Math.floor(totalDays / 7) * perWeekPrice + (totalDays % 7) * perDayPrice
+      );
     }
   };
   return (
@@ -308,7 +314,38 @@ export default function ProductForm() {
                 <Text color="red.500">{errors.category}</Text>
               )}
             </GridItem>
+            <GridItem colSpan={2}>
+              <Input
+                type="text"
+                name="Username"
+                placeholder="Owner Name"
+                value={formData.Username}
+                onChange={handleChange}
+                border={errors.Username ? "2px solid red" : "1px solid gray"}
+              />
+              {errors.Username && (
+                <Text color="red.500">{errors.Username}</Text>
+              )}
 
+              {errors.productDetails && (
+                <Text color="red.500">{errors.productDetails}</Text>
+              )}
+            </GridItem>
+            <GridItem colSpan={2}>
+              <Input
+                type="text"
+                name="Address"
+                placeholder="Address"
+                value={formData.Address}
+                onChange={handleChange}
+                border={
+                  errors.productDetails ? "2px solid red" : "1px solid gray"
+                }
+              />
+              {errors.productDetails && (
+                <Text color="red.500">{errors.productDetails}</Text>
+              )}
+            </GridItem>
             {/* Date Selection */}
             <GridItem colSpan={2}>
               <InputGroup>

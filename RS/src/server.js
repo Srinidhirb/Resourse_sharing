@@ -37,6 +37,8 @@ mongoose
     totalAvailableDays: Number,
     perDayPrice: Number, // Ensure this field exists
     perWeekPrice: Number, 
+    Address: String,
+    Username: String,
     
   });
 

@@ -203,6 +203,9 @@ export default function PreviewPage() {
                   <Text color="gray.600" fontSize="17px" maxW={550} mt={4}>
                     {formData.productDetails || "No description available."}
                   </Text>
+                  <Text fontWeight="bold" fontSize="17px" mt={4}>
+                  Address : {formData.Address || "No Address available."}
+                  </Text>
 
                   <Text fontWeight="bold" mt={4}>
                     Quantity: {formData.quantity || "N/A"}
@@ -217,6 +220,9 @@ export default function PreviewPage() {
                         (1000 * 60 * 60 * 24)
                     )}{" "}
                     Days)
+                  </Text>
+                  <Text mt={2} fontWeight="semibold">
+                    User Name: {formData.Username}
                   </Text>
                   <Text mt={2} fontWeight="semibold">
                     Phone: {formData.phone}

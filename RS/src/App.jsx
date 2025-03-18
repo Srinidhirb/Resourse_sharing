@@ -8,6 +8,7 @@ import ImageGallery from "./Pages/ImageGallery";
 import OrderPage from "./Pages/OrderPage";
 import CartPage from "./Pages/CartPage";
 import { CartProvider } from "./Context/CartContext";
+import CheckoutPage from "./Pages/CheckoutPage";
 function App() {
   return (
     <CartProvider>
@@ -21,6 +22,7 @@ function App() {
         <Route path="/gallery" element={<ImageGallery />} />
         <Route path="/orderpage" element={<OrderPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </Router>
     </CartProvider>

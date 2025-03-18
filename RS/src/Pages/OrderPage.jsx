@@ -5,13 +5,14 @@ import Lottie from "react-lottie-player";
 import OrderPlaced from "../Component/OrderPlaced";
 import successAnimation from "../assets/success-animation.json"; // Google Pay-style animation JSON
 import Navbar from "../Component/Navbar";
+import { useLocation } from "react-router-dom";
 
 const MotionBox = motion(Box); // Motion wrapper for animations
 
-const OrderPage = ({
-  title = "Congratulations",
-  message = "Your Listing has been  Successfully Added.",
-}) => {
+const OrderPage = () => {
+  const location = useLocation();
+  const { title = "Congratulations", message = "Your Listing has been Successfully Added." } = location.state || {}; // Destructure the passed props
+
   const [showSuccess, setShowSuccess] = useState(false);
   const [showText, setShowText] = useState(false);
 
