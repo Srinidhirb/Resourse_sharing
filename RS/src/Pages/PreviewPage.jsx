@@ -40,6 +40,7 @@ export default function PreviewPage() {
         No data available
       </Text>
     );
+    
 
   const handleConfirm = async () => {
     const data = new FormData();
