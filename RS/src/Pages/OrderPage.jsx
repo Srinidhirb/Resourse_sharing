@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Box, Center, VStack, Heading, Text } from "@chakra-ui/react";
-import { motion } from "framer-motion"; // Import Framer Motion
+import { motion } from "framer-motion"; 
 import Lottie from "react-lottie-player";
 import OrderPlaced from "../Component/OrderPlaced";
-import successAnimation from "../assets/success-animation.json"; // Google Pay-style animation JSON
+import successAnimation from "../assets/success-animation.json"; 
 import Navbar from "../Component/Navbar";
 import { useLocation } from "react-router-dom";
 
-const MotionBox = motion(Box); // Motion wrapper for animations
+const MotionBox = motion(Box); 
 
 const OrderPage = () => {
   const location = useLocation();
@@ -17,7 +17,7 @@ const OrderPage = () => {
   const [showText, setShowText] = useState(false);
 
   useEffect(() => {
-    // Show success animation after 4 seconds
+    
     const timer = setTimeout(() => {
       setShowSuccess(true);
     }, 3000);
@@ -30,7 +30,7 @@ const OrderPage = () => {
       <Navbar defaultWhite={true} />
       <Center minH="100vh" bg="white">
         {!showSuccess ? (
-          <OrderPlaced /> // Show Loader
+          <OrderPlaced /> 
         ) : (
           <MotionBox
             p={6}
@@ -41,16 +41,16 @@ const OrderPage = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             <VStack spacing={3}>
-              {/* Google Pay-style Success Animation */}
+          
               <Lottie
                 loop={false}
                 play
                 animationData={successAnimation}
                 style={{ width: 150, height: 150 }}
-                onComplete={() => setShowText(true)} // Show text after animation completes
+                onComplete={() => setShowText(true)} 
               />
 
-              {/* Smooth transition for text */}
+           
               {showText && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}

@@ -77,7 +77,6 @@ export default function PreviewPage() {
     );
     const perDayPrice = parseFloat(formData.perDayPrice) || 0;
     const perWeekPrice = parseFloat(formData.perWeekPrice) || 0;
-
     let totalPrice;
     if (totalDays < 7) {
       totalPrice = totalDays * perDayPrice;
@@ -86,14 +85,11 @@ export default function PreviewPage() {
         Math.floor(totalDays / 7) * perWeekPrice +
         (totalDays % 7) * perDayPrice;
     }
-
     return { totalPrice, totalDays };
   };
 
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
-    // Simulating an API call or resource loading
     setTimeout(() => {
       setLoading(false);
     }, 2000);
@@ -118,7 +114,7 @@ export default function PreviewPage() {
                 gap={6}
                 mt={4}
               >
-                {/* Image Gallery */}
+          
                 <Box
                   flex="1"
                   maxW="800px"
@@ -187,7 +183,6 @@ export default function PreviewPage() {
                     ))}
                   </Flex>
                 </Box>
-                {/* Product Details */}
                 <Box flex="1">
                   <Badge colorScheme="blue">
                     {formData.category || "Uncategorized"}
